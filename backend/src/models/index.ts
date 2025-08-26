@@ -6,7 +6,16 @@ export const User = sequelize.define('User', {
   name: { type: DataTypes.STRING, allowNull: false },
   email: { type: DataTypes.STRING, allowNull: false, unique: true },
   password_hash: { type: DataTypes.STRING, allowNull: false },
-  role: { type: DataTypes.STRING, allowNull: false, defaultValue: 'user' },
+  role: { type: DataTypes.STRING, allowNull: false, defaultValue: 'attendee' },
+
+  // NOVOS CAMPOS
+  email_verified_at: { type: DataTypes.DATE, allowNull: true },
+  verify_code_hash: { type: DataTypes.STRING, allowNull: true },
+  verify_code_expires_at: { type: DataTypes.DATE, allowNull: true },
+
+  // dados opcionais do organizer (mantém compatível)
+  org_name: { type: DataTypes.STRING, allowNull: true },
+  org_cnpj: { type: DataTypes.STRING, allowNull: true, unique: false },
 });
 
 export const Event = sequelize.define('Event', {
@@ -28,6 +37,8 @@ export const TicketType = sequelize.define('TicketType', {
   price_cents: { type: DataTypes.INTEGER, allowNull: false },
   qty_total: { type: DataTypes.INTEGER, allowNull: false },
   qty_sold: { type: DataTypes.INTEGER, allowNull: false, defaultValue: 0 },
+  sales_start: { type: DataTypes.DATE, allowNull: true },
+  sales_end: { type: DataTypes.DATE, allowNull: true },
 });
 
 export const Order = sequelize.define('Order', {
@@ -78,3 +89,5 @@ Ticket.belongsTo(TicketType, { foreignKey: 'ticket_type_id' });
 
 Event.hasMany(Coupon, { foreignKey: 'event_id' });
 Coupon.belongsTo(Event, { foreignKey: 'event_id' });
+
+export { sequelize }
