@@ -1,15 +1,16 @@
-import React from 'react'
-import { ThemeProvider as NextThemesProvider } from 'next-themes'
+import { ThemeProvider as NextThemes } from 'next-themes'
+import type { ReactNode } from 'react'
 
-export default function ThemeProvider({ children }: { children: React.ReactNode }) {
+export default function ThemeProvider({ children }: { children: ReactNode }) {
     return (
-        <NextThemesProvider
-            attribute="class"
+        <NextThemes
+            attribute="class"          // aplica/remove .dark no <html>
             defaultTheme="system"
             enableSystem
+            storageKey="ticketa-theme"
             disableTransitionOnChange
         >
             {children}
-        </NextThemesProvider>
+        </NextThemes>
     )
 }
