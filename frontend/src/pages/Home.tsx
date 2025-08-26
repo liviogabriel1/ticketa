@@ -17,14 +17,20 @@ export default function Home() {
   const [events, setEvents] = useState<EventType[]>([])
   const [loading, setLoading] = useState(true)
 
-  const isLogged = useMemo(() => !!localStorage.getItem('token'), [])
-  const userName = useMemo(() => {
+  const { isLogged, userName, role, isOrganizer } = useMemo(() => {
+    const token = !!localStorage.getItem('token')
+    let name = ''
+    let role: string | undefined
     try {
       const u = localStorage.getItem('user')
-      return u ? (JSON.parse(u).name as string) : ''
-    } catch {
-      return ''
-    }
+      if (u) {
+        const parsed = JSON.parse(u)
+        name = parsed?.name ?? ''
+        role = parsed?.role
+      }
+    } catch { }
+    const isOrg = role === 'organizer' || role === 'admin'
+    return { isLogged: token, userName: name, role, isOrganizer: isOrg }
   }, [])
 
   useEffect(() => {
@@ -45,7 +51,7 @@ export default function Home() {
       {/* HERO */}
       <section className="mx-auto max-w-6xl px-4 pt-8">
         <Card className="overflow-hidden border-slate-200 dark:border-slate-800 bg-white/90 dark:bg-slate-900/80">
-          <div className="h-28 bg-gradient-to-r from-slate-100 via-white to-slate-100 dark:from-slate-800 dark:via-slate-900 dark:to-slate-800" />
+          <div className="hero-band" />
           <CardContent className="p-6 -mt-10">
             <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-100">Ticketa</h1>
             <p className="text-slate-600 dark:text-slate-400 mt-2">
@@ -70,20 +76,37 @@ export default function Home() {
               </span>
 
               {isLogged ? (
-                <>
-                  <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">Nenhum evento publicado ainda</h2>
-                  <p className="text-slate-600 dark:text-slate-400 mt-1">
-                    {userName ? `Olá, ${userName}. ` : ''}Que tal criar seu primeiro evento?
-                  </p>
-                  <div className="mt-6 flex items-center justify-center gap-3">
-                    <a href="/event/new">
-                      <Button className="rounded-xl h-10">Criar evento</Button>
-                    </a>
-                    <a href="/me/tickets">
-                      <Button variant="outline" className="rounded-xl h-10">Meus ingressos</Button>
-                    </a>
-                  </div>
-                </>
+                isOrganizer ? (
+                  <>
+                    <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">Nenhum evento publicado ainda</h2>
+                    <p className="text-slate-600 dark:text-slate-400 mt-1">
+                      {userName ? `Olá, ${userName}. ` : ''}Que tal criar seu primeiro evento?
+                    </p>
+                    <div className="mt-6 flex items-center justify-center gap-3">
+                      <a href="/event/new">
+                        <Button className="rounded-xl h-10">Criar evento</Button>
+                      </a>
+                      <a href="/me/tickets">
+                        <Button variant="outline" className="rounded-xl h-10">Meus ingressos</Button>
+                      </a>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">Nenhum evento publicado ainda</h2>
+                    <p className="text-slate-600 dark:text-slate-400 mt-1">
+                      {userName ? `Olá, ${userName}. ` : ''}Acesse seus tickets ou torne-se organizador para criar eventos.
+                    </p>
+                    <div className="mt-6 flex items-center justify-center gap-3">
+                      <a href="/me/tickets">
+                        <Button className="rounded-xl h-10">Meus ingressos</Button>
+                      </a>
+                      <a href="/organizer/apply">
+                        <Button variant="outline" className="rounded-xl h-10">Quero criar eventos</Button>
+                      </a>
+                    </div>
+                  </>
+                )
               ) : (
                 <>
                   <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">Nenhum evento publicado ainda</h2>
