@@ -2,7 +2,7 @@ import React from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Ticket } from 'lucide-react'
-import ThemeToggle from '@/components/ThemeToggle'
+import ThemeToggle from '@/components/Themetoggle'
 
 export default function NavBar() {
     const location = useLocation()
@@ -19,15 +19,17 @@ export default function NavBar() {
     }
 
     return (
-        <header className="sticky top-0 z-50 border-b bg-white/80 backdrop-blur-xl
-                       border-slate-200 dark:border-slate-800
-                       dark:bg-slate-900/70">
+        <header
+            className="
+        sticky top-0 z-50 border-b bg-white/80 backdrop-blur-xl
+        border-slate-200 dark:border-slate-800
+        dark:bg-slate-900/70
+      "
+        >
             <div className="mx-auto max-w-7xl px-4 h-16 flex items-center justify-between">
                 <Link to="/" className="inline-flex items-center gap-2 font-bold text-xl tracking-tight">
                     <Ticket className="h-6 w-6 text-slate-900 dark:text-slate-100" />
-                    <span className="bg-gradient-to-r from-slate-900 to-slate-600
-                           dark:from-slate-100 dark:to-slate-300
-                           bg-clip-text text-transparent">
+                    <span className="bg-gradient-to-r from-slate-900 to-slate-600 dark:from-slate-100 dark:to-slate-300 bg-clip-text text-transparent">
                         Ticketa
                     </span>
                 </Link>
